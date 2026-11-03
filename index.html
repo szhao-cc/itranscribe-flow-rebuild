@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<title>Growth Audit — iTranscribe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: only light;
+  /* ---- iTranscribe, extracted from their live screens ---- */
+  --it-bg:#EAF6FE; --it-bg2:#EFF9FF; --it-blob:#C4D9FE; --it-card:#FFFFFF; --it-card-dim:rgba(255,255,255,.62);
+  --it-blue:#347DFF; --it-blue-dk:#2E6BF0; --it-blue-ink:#1F5FE0; --it-sel:#D5E5FE; --it-seg:#B9D3FA;
+  --it-ink:#222225; --it-txt:#3A3F47; --it-sub:#5B6675; --it-muted:#8E97A3; --it-line:#BFC6CE;
+  --it-yellow:#FDD600; --it-star:#F6A609; --it-orb:radial-gradient(circle at 30% 28%,#2E5BFF 0%,#6F86FF 45%,#A8B6FF 75%,#C9D6FF 100%);
+  --r-ctl:14px; --r-media:22px;
+  /* ---- the report shell, in iTranscribe's own palette ---- */
+  --bg:#EEF7FE; --bg2:#FFFFFF; --surf:#FFFFFF;
+  --hair:rgba(34,34,37,.09); --hair2:rgba(34,34,37,.16);
+  --ink:#222225; --ink2:#4A5462; --ink3:#8691A0;
+  --accent:#347DFF; --accent-lift:#1F5FD6;
+  --panel:#FFFFFF; --panel-ink:#16181C; --panel-muted:#5F6874; --panel-line:#E7ECF2;
+  --accent-ink:#1A55C4;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+@media(max-width:700px){.wrap{padding:0 20px}}
+
+/* ============ top bar ============ */
+.nav{position:sticky;top:0;z-index:70;background:rgba(238,247,254,.86);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--hair)}
+.nav-in{max-width:1080px;margin:0 auto;padding:0 32px;height:58px;display:flex;align-items:center;gap:18px}
+@media(max-width:700px){.nav-in{padding:0 20px;gap:12px}}
+.nav-brand{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.nav-brand .mk{width:26px;height:26px;flex:none;display:block;border-radius:7px;overflow:hidden;box-shadow:0 1px 3px rgba(34,34,37,.18)}
+.nav-brand .mk img{width:26px;height:26px;display:block}
+.nav-brand span{color:var(--ink2);font-weight:500}
+.nav-brand b{color:var(--ink);font-weight:600}
+.nav-links{margin-left:auto;display:flex;gap:2px;align-items:center}
+.nav-links button{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink3);transition:.16s}
+.nav-links button:hover{color:var(--ink)}
+.nav-links button.on{color:var(--ink);background:#fff;box-shadow:0 1px 4px rgba(34,34,37,.08)}
+@media(max-width:640px){.nav-brand span{display:none}}
+
+.view{display:none}
+.view.on{display:block}
+
+/* ============ hero ============ */
+.hero{padding:104px 0 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-340px;left:50%;transform:translateX(-50%);
+  width:1100px;height:640px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(52,125,255,.18),transparent 72%)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(40% 50% at 8% 20%,rgba(196,217,254,.55),transparent 70%),
+   radial-gradient(38% 45% at 92% 18%,rgba(168,182,255,.38),transparent 70%)}
+.hero>*{position:relative;z-index:1}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-lift);margin-bottom:26px}
+.hero h1{font-size:76px;line-height:.98;font-weight:700;letter-spacing:-.045em;margin:0 0 24px}
+@media(max-width:820px){.hero h1{font-size:50px}.hero{padding-top:70px}}
+.hero .lede{font-size:20px;line-height:1.5;font-weight:400;color:var(--ink2);max-width:600px;margin:0 auto;letter-spacing:-.012em}
+@media(max-width:820px){.hero .lede{font-size:17px}}
+.hero .meta{margin-top:30px;font-size:12.5px;color:var(--ink3);letter-spacing:.02em}
+.hero .meta b{color:var(--ink2);font-weight:600}
+
+.stats{display:flex;justify-content:center;gap:0;margin:70px auto 0;max-width:760px;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.stat{flex:1;padding:26px 14px;text-align:center;border-left:1px solid var(--hair)}
+.stat:first-child{border-left:none}
+.stat b{display:block;font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.stat span{display:block;font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.35}
+@media(max-width:700px){.stat b{font-size:19px}.stat{padding:18px 8px}}
+
+.fb{max-width:760px;margin:0 auto;padding:30px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:26px;text-align:left}
+@media(max-width:700px){.fb{grid-template-columns:1fr;gap:20px;padding-top:24px}}
+.fb-k{grid-column:1/-1;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink3);text-align:center;margin-bottom:-6px}
+.fb-i{display:flex;gap:12px;align-items:flex-start}
+.fb-i .tick{width:18px;height:18px;flex:none;margin-top:3px;border-radius:50%;background:rgba(52,125,255,.15);
+  display:grid;place-items:center}
+.fb-i .tick svg{width:10px;height:10px;stroke:var(--accent-lift);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.fb-i p{font-size:14px;line-height:1.55;color:var(--ink2);margin:0}
+.fb-i p b{color:var(--ink);font-weight:700}
+
+.sec{padding:96px 0}
+.sec-k{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.sec h2{font-size:38px;line-height:1.14;font-weight:700;letter-spacing:-.035em;margin:0 0 20px;max-width:680px}
+@media(max-width:820px){.sec h2{font-size:29px}.sec{padding:64px 0}}
+.sec p.body{font-size:17px;line-height:1.66;color:var(--ink2);max-width:640px;margin:0 0 18px;letter-spacing:-.008em}
+.sec p.body b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--hair);margin:0}
+
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;max-width:820px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surf);border:1px solid var(--hair);box-shadow:0 2px 10px rgba(34,34,37,.04);border-radius:16px;padding:24px 26px}
+.note h4{font-size:15px;font-weight:700;letter-spacing:-.015em;margin:0 0 8px}
+.note p{font-size:14px;line-height:1.6;color:var(--ink2);margin:0}
+
+.ideas{display:flex;flex-direction:column;gap:0;margin-top:14px;border-top:1px solid var(--hair)}
+.idea{display:grid;grid-template-columns:52px 1fr 180px;gap:26px;align-items:start;
+  padding:30px 4px;border-bottom:1px solid var(--hair);text-align:left;width:100%;transition:.18s}
+.idea:hover{background:rgba(255,255,255,.7)}
+@media(max-width:780px){.idea{grid-template-columns:38px 1fr;gap:16px}}
+.idea .no{font-size:13px;font-weight:700;color:var(--ink3);padding-top:4px;letter-spacing:.02em}
+.idea h3{font-size:21px;line-height:1.25;font-weight:700;letter-spacing:-.024em;margin:0 0 7px}
+@media(max-width:820px){.idea h3{font-size:18px}}
+.idea p{font-size:14.5px;line-height:1.6;color:var(--ink2);margin:0;max-width:540px}
+.idea .out{text-align:right;padding-top:3px}
+@media(max-width:780px){.idea .out{grid-column:2;text-align:left;padding-top:12px}}
+.idea .out b{display:block;font-size:19px;font-weight:700;letter-spacing:-.025em;color:var(--accent-lift);white-space:nowrap}
+.idea .out span{display:block;font-size:10.5px;color:var(--ink3);margin-top:3px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.idea .seeit{display:inline-flex;align-items:center;gap:5px;margin-top:11px;font-size:12.5px;
+  font-weight:600;color:var(--accent-lift)}
+.idea .seeit svg{width:12px;height:12px}
+
+.band{background:var(--surf);border:1px solid var(--hair);border-radius:28px;box-shadow:0 2px 10px rgba(34,34,37,.04);padding:40px 44px;margin-top:44px;
+  display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+@media(max-width:700px){.band{padding:28px 24px;gap:22px}}
+.band .lab{font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.band .txt{flex:1;min-width:240px}
+.band .txt p{font-size:15.5px;line-height:1.6;color:var(--ink2);margin:0}
+.band .nums{display:flex;gap:34px}
+.band .nums div b{display:block;font-size:30px;font-weight:700;letter-spacing:-.035em;color:var(--accent-lift)}
+.band .nums div span{display:block;font-size:11px;color:var(--ink3);margin-top:2px;letter-spacing:.04em;
+  text-transform:uppercase;font-weight:600}
+
+.cta-row{display:flex;justify-content:center;margin-top:52px;align-items:center;gap:22px;flex-wrap:wrap}
+.bigbtn{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;padding:15px 26px;border-radius:30px;transition:.16s}
+.bigbtn:hover{filter:brightness(1.08)}
+.bigbtn svg{width:15px;height:15px}
+
+.foot{border-top:1px solid var(--hair);padding:36px 0 70px;font-size:12.5px;line-height:1.6;color:var(--ink3)}
+
+/* ============ prototype stage ============ */
+.stage{display:grid;grid-template-columns:minmax(440px,1fr) minmax(400px,470px);gap:0;
+  align-items:start;min-height:calc(100vh - 58px)}
+@media(max-width:1080px){.stage{grid-template-columns:1fr}}
+.phonecol{padding:34px 24px 46px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.panelcol{border-left:1px solid var(--hair);background:var(--panel);color:var(--panel-ink);
+  min-height:calc(100vh - 58px);position:sticky;top:58px;max-height:calc(100vh - 58px);overflow-y:auto}
+@media(max-width:1080px){.panelcol{position:static;max-height:none;border-left:none;border-top:1px solid var(--hair)}}
+
+.phone{position:relative;width:390px;height:844px;flex:none;background:#000;border:11px solid #000;
+  border-radius:46px;box-shadow:0 0 0 1.5px #CFDAE6,0 34px 70px -22px rgba(34,34,37,.35)}
+.phone-in{position:absolute;inset:0;border-radius:36px;overflow:hidden;background:var(--it-bg);color-scheme:only light}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;
+  border-radius:16px;z-index:60;pointer-events:none}
+.sbar{position:absolute;top:0;left:0;right:0;height:50px;z-index:55;pointer-events:none;display:flex;
+  align-items:center;justify-content:space-between;padding:14px 28px 0 34px;font:600 15px/1 'Inter',-apple-system,sans-serif;color:#111;transition:color .3s}
+.sbar.light{color:#fff}
+.sbar .glyphs{display:flex;gap:5px;align-items:center}
+.homebar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:134px;height:5px;
+  border-radius:3px;background:#111;z-index:56;pointer-events:none;transition:background .3s}
+.homebar.light{background:rgba(255,255,255,.9)}
+.screenwrap{position:absolute;inset:0;overflow:hidden;background:var(--it-bg)}
+
+/* ============ phone screens — iTranscribe's system, all prefixed scr-/it- ============ */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;color:var(--it-ink);
+  background:radial-gradient(70% 34% at 50% 44%,var(--it-blob),transparent 75%),linear-gradient(180deg,#E8F4FF 0%,var(--it-bg) 45%,var(--it-bg2) 100%);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC',sans-serif;
+  transform:translateX(100%);transition:transform .36s cubic-bezier(.32,.72,0,1);z-index:10;will-change:transform}
+.scr.is-active{transform:translateX(0);z-index:20}
+.scr.is-past{transform:translateX(-24%)}
+.scr.sheet{transform:translateY(100%)}
+.scr.sheet.is-active{transform:translateY(0);z-index:30}
+.scr.nofx{transition:none}
+.scr-top{flex:none;padding:56px 18px 0;position:relative;z-index:2}
+.scr-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 15px;scrollbar-width:none;position:relative;z-index:2}
+.scr-body::-webkit-scrollbar{display:none}
+.scr-body.dock{display:flex;flex-direction:column}
+.scr-foot{flex:none;padding:12px 15px 34px;position:relative;z-index:2}
+
+.it-btn{position:relative;display:block;width:100%;height:54px;border-radius:27px;background:var(--it-blue);color:#fff;
+  font:500 18px/1 'Inter',-apple-system,'PingFang TC',sans-serif;letter-spacing:-.005em;transition:filter .15s}
+.it-btn:hover{filter:brightness(1.05)}
+.it-btn::after{content:'';position:absolute;right:26px;top:50%;width:7px;height:7px;margin-top:-4px;
+  border-right:2px solid #fff;border-top:2px solid #fff;transform:rotate(45deg)}
+.it-btn.arrow::after{width:14px;height:2px;border:0;background:#fff;transform:none;margin-top:-1px;right:22px}
+.it-btn.arrow::before{content:'';position:absolute;right:22px;top:50%;width:8px;height:8px;margin-top:-4.5px;
+  border-right:2px solid #fff;border-top:2px solid #fff;transform:rotate(45deg)}
+.it-btn.plain::after{display:none}
+.it-btn[disabled]{background:#A9B6C6;cursor:default}
+.it-btn[disabled]:hover{filter:none}
+
+/* header: plain chevron + four-part progress (only the current part is dark) */
+.it-nav{height:34px;display:flex;align-items:center}
+.it-back{width:34px;height:34px;margin-left:-6px;display:grid;place-items:center;color:#222}
+.it-back svg{width:20px;height:20px}
+.it-prog{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px}
+.it-prog i{height:4.5px;border-radius:3px;background:var(--it-seg)}
+.it-prog i.on{background:var(--it-blue-dk)}
+.it-q{font-size:17px;line-height:1.36;font-weight:600;letter-spacing:-.01em;color:var(--it-ink);margin:24px 0 0}
+
+/* option cards */
+.it-opts{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+.it-opt{display:block;width:100%;text-align:left;background:var(--it-card-dim);border:1.5px solid transparent;border-radius:var(--r-ctl);
+  padding:13px 14px 13px;transition:.15s}
+.it-opt b{display:block;font-size:15px;font-weight:600;color:var(--it-ink);line-height:1.3}
+.it-opt span{display:block;font-size:13px;color:var(--it-sub);margin-top:4px;line-height:1.35}
+.it-opt.on{background:#fff;border-color:var(--it-blue-dk)}
+
+/* intro slides */
+.it-title{font-size:27px;line-height:1.1;font-weight:600;letter-spacing:-.02em;text-align:center;margin:16px 0 0;color:#1E2326}
+.it-mcard{background:#fff;border-radius:var(--r-media);margin-top:26px;height:368px;position:relative;overflow:hidden}
+.it-tiles{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;grid-template-columns:104px 104px;gap:12px}
+.it-tiles img{width:104px;height:104px;border-radius:13px;object-fit:cover;display:block}
+.it-orb{width:92px;height:92px;margin:6px;border-radius:50%;background:var(--it-orb);display:grid;place-items:center;
+  font:600 11.5px/1 'Inter',sans-serif;color:#fff;letter-spacing:-.01em}
+.it-ft{font-size:16.5px;font-weight:600;text-align:center;margin-top:30px;color:#1E2326;letter-spacing:-.01em}
+.it-fs{font-size:14px;line-height:1.4;text-align:center;margin:8px 10px 0;color:#2A2F35}
+.it-sum{position:absolute;inset:0;padding:22px 12px 18px 12px;overflow:hidden;font-size:11.6px;line-height:1.55;color:#262A30}
+.it-sum h5{font-size:12px;font-weight:700;color:var(--it-blue-ink);margin:0 0 3px}
+.it-sum h5+p{margin-bottom:14px}
+.it-sum li{list-style:none;margin:0 0 2px;padding-left:17px;position:relative}
+.it-sum li::before{content:'';position:absolute;left:0;top:3px;width:12px;height:12px;border-radius:3px;background:#3CB043}
+.it-sum li::after{content:'';position:absolute;left:4px;top:5px;width:3px;height:6px;border:solid #fff;border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.it-chat{position:absolute;inset:0;padding:12px 12px 14px 12px;font-size:11.8px;line-height:1.55;color:#262A30}
+.it-chat .av{display:block;width:28px;height:28px;border-radius:50%;margin-left:auto}
+.it-chat .q{background:#DAE8FD;border-radius:10px;padding:8px 10px;margin:8px 0 0 30px;font-size:12px;white-space:pre-line}
+.it-chat .q em{font-style:normal;color:var(--it-blue-ink)}
+.it-chat .bot{display:block;width:26px;height:26px;margin:14px 0 6px}
+.it-chat p{white-space:pre-line}
+.it-revh{font-size:17px;font-weight:600;margin:14px 0 9px;color:#1E2326;letter-spacing:-.01em}
+.it-rev{background:#fff;border-radius:var(--r-media);padding:13px 14px 11px;margin-bottom:10px}
+.it-stars{display:flex;gap:3px}
+.it-stars svg{width:13px;height:13px;fill:var(--it-star)}
+.it-rev .qm{font:900 20px/1 Georgia,serif;color:#1E2326;margin:6px 0 -2px;height:12px}
+.it-rev p{font-size:12.8px;line-height:1.5;color:#262A30}
+.it-rev .by{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:6px;font-size:13px;font-weight:600;color:#1E2326}
+.it-rev .by i{display:grid;place-items:center;width:20px;height:20px;border-radius:5px;font:700 12px/1 Arial,sans-serif;font-style:normal;color:#fff}
+
+/* loader — their gradient orb */
+.scr--load .scr-top{padding-top:0}
+.it-loadwrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:40px 6px}
+.it-bigorb{width:150px;height:150px;border-radius:50%;background:var(--it-orb);display:grid;place-items:center;
+  font:600 17px/1 'Inter',sans-serif;color:#fff;animation:pulse 2.2s ease-in-out infinite;box-shadow:0 20px 50px -18px rgba(52,90,255,.6)}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.it-load-h{font-size:19px;font-weight:600;letter-spacing:-.01em;color:#1E2326;text-align:center;margin:30px 0 18px}
+.it-lsteps{width:100%;max-width:310px;display:flex;flex-direction:column;gap:11px;margin-bottom:24px}
+.it-ls{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--it-muted);transition:.35s}
+.it-ls.on{color:var(--it-ink)}
+.it-ls .d{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid var(--it-seg);display:grid;place-items:center;transition:.35s}
+.it-ls.on .d{background:var(--it-blue);border-color:var(--it-blue)}
+.it-ls .d svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;stroke-linecap:round;stroke-linejoin:round}
+.it-ls.on .d svg{opacity:1}
+.it-lq{width:100%;max-width:330px;min-height:112px}
+.it-qd{display:flex;gap:5px;justify-content:center;margin-top:4px}
+.it-qd i{width:6px;height:6px;border-radius:50%;background:var(--it-seg);transition:.3s}
+.it-qd i.on{background:var(--it-blue);width:16px;border-radius:3px}
+
+/* payoff — their Enjoy iTranscribe Pro */
+.it-proh{font-size:27px;font-weight:700;letter-spacing:-.02em;color:var(--it-blue-dk);text-align:center;margin:22px 0 0}
+.it-pros{font-size:14.5px;color:var(--it-sub);text-align:center;margin-top:6px}
+.it-setup{background:#fff;border-radius:var(--r-media);padding:12px 14px 4px;margin-top:16px}
+.it-srow{display:flex;align-items:center;gap:12px;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #EDF1F6}
+.it-srow:last-child{border-bottom:0;margin-bottom:0}
+.it-pill{flex:none;width:118px;height:36px;border-radius:10px;background:var(--it-blue);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;
+  font:600 15px/1 'Inter',-apple-system,'PingFang TC',sans-serif}
+.it-srow div{font-size:13.5px;line-height:1.35;color:var(--it-txt)}
+.it-srow div b{display:block;font-size:14.5px;color:var(--it-ink);font-weight:600}
+.it-rate{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r-media);padding:12px 14px;margin-top:12px}
+.it-rate .big{font-size:30px;font-weight:700;letter-spacing:-.03em;color:var(--it-ink);line-height:1}
+.it-rate .meta{font-size:12.5px;color:var(--it-sub);line-height:1.35}
+.it-rate .meta b{display:block;color:var(--it-ink);font-size:13.5px;font-weight:600}
+.it-press{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.it-press .it-rev{margin:0;padding:11px 12px 10px}
+.it-press .it-rev p{font-size:11.6px}
+.it-press .it-rev .by{font-size:12px}
+
+/* paywall — their photo paywall */
+.scr--pay{background:var(--it-bg2)}
+.it-payphoto{position:absolute;left:0;right:0;top:0;height:480px;z-index:1;pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 58%,transparent 98%);mask-image:linear-gradient(180deg,#000 58%,transparent 98%)}
+.it-payphoto img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.scr--pay .scr-top{padding:356px 18px 0}
+.it-x{position:absolute;right:16px;top:54px;z-index:4;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.55);
+  display:grid;place-items:center;color:#2A2F36;backdrop-filter:blur(6px)}
+.it-x svg{width:15px;height:15px}
+.it-payh{font-size:24px;line-height:1.18;font-weight:700;letter-spacing:-.02em;text-align:center;color:#111}
+.it-payh span{display:block}
+.it-bul{display:flex;flex-direction:column;gap:3px;margin:10px 4px 0 8px}
+.it-bul div{font-size:15px;line-height:1.35;color:#111;display:flex;gap:9px;white-space:nowrap}
+.it-bul div i{font-style:normal;width:22px;text-align:center}
+.it-plans{display:flex;flex-direction:column;gap:13px;margin-top:20px}
+.it-plan{position:relative;display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;
+  background:rgba(255,255,255,.35);border:1.5px solid var(--it-line);border-radius:16px;padding:10px 16px;transition:.15s}
+.it-plan.on{background:var(--it-sel);border-color:var(--it-blue-dk);border-width:2px;padding:9.5px 15.5px}
+.it-plan .t{display:block;font-size:16px;font-weight:600;color:#111;line-height:1.25}
+.it-plan .s{display:block;font-size:13px;font-weight:500;color:#111;margin-top:1px}
+.it-plan .r{text-align:right}
+.it-plan .r b{display:block;font-size:16px;font-weight:700;color:#111;line-height:1.25}
+.it-plan .r span{display:block;font-size:12.5px;color:#222;margin-top:1px}
+.it-plan .r span.save{color:var(--it-blue-ink);font-weight:600}
+.it-badge{position:absolute;top:-12px;right:18px;background:var(--it-yellow);border-radius:9px;padding:4px 9px;
+  font:600 12.5px/1 'Inter',-apple-system,'PingFang TC',sans-serif;color:#111}
+.scr--pay .scr-foot{padding:10px 15px 26px}
+.it-trust{font-size:12.5px;color:#8C949C;text-align:center;margin:12px 0 0}
+.it-legal{display:flex;justify-content:space-around;margin-top:10px}
+.it-legal a{font-size:12.5px;color:#9AA2AA;text-decoration:none}
+
+/* offer — comparison-led, direct purchase */
+.scr--offer{background:linear-gradient(180deg,#E8F4FF 0%,var(--it-bg2) 60%)}
+.scr--offer .it-x{background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.it-ok{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--it-blue-ink);text-align:center;margin-top:34px}
+.it-oh{font-size:26px;font-weight:700;letter-spacing:-.02em;text-align:center;color:#111;margin-top:6px}
+.it-cmp{background:#fff;border-radius:var(--r-media);margin-top:16px;padding:6px 14px 4px}
+.it-cmp table{width:100%;border-collapse:collapse}
+.it-cmp th{font-size:12px;font-weight:700;color:var(--it-muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 0 6px;text-align:center;width:46px}
+.it-cmp th:first-child{text-align:left;width:auto}
+.it-cmp th.pro{color:var(--it-blue-ink)}
+.it-cmp td{font-size:13.5px;color:var(--it-txt);padding:7px 0;border-top:1px solid #EEF2F6;text-align:center}
+.it-cmp td:first-child{text-align:left;color:var(--it-ink);font-weight:500}
+.it-cmp .y{color:var(--it-blue);font-weight:800}
+.it-cmp .n{color:#C2C8D0}
+.scr--offer .it-plans{margin-top:24px}
+.scr--offer .it-plan{cursor:default}
+
+/* activated — their toggle screen, now after the purchase */
+.scr--done{background:#fff}
+.it-donewrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+.it-tog{width:52px;height:30px;border-radius:15px;background:#E5E7EB;position:relative;transition:background .35s}
+.it-tog i{position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .35s cubic-bezier(.32,.72,0,1)}
+.it-tog.on{background:var(--it-blue)}
+.it-tog.on i{left:25px}
+.it-d1{font-size:29px;font-weight:700;color:var(--it-blue);margin-top:20px;letter-spacing:-.015em}
+.it-d2{font-size:29px;font-weight:700;color:#222;margin-top:2px;letter-spacing:-.015em}
+
+/* home — where the flow hands over */
+.scr--home{background:linear-gradient(180deg,#E7F1FE 0%,#F4F6F9 30%)}
+.it-hh{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.it-hh b{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.it-hh span{display:flex;gap:8px}
+.it-hh span i{width:36px;height:36px;border-radius:50%;background:#EEF1F5;display:block}
+.it-hsheet{background:#fff;border-radius:20px 20px 0 0;margin:16px -15px 0;padding:14px 15px 20px;min-height:520px}
+.it-tabs{display:flex;gap:10px}
+.it-tabs span{padding:8px 16px;border-radius:18px;background:#EEF0F3;font-size:14px;color:#555}
+.it-tabs span.on{background:var(--it-blue);color:#fff}
+.it-hcard{border-radius:18px;padding:14px 16px;margin-top:12px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.it-hcard.tr{background:linear-gradient(120deg,#E3EEFF,#F6FAFF 60%,#E9FBF8)}
+.it-hcard b{display:block;font-size:17px;font-weight:600}
+.it-hcard p{font-size:13px;color:#444;margin-top:4px;line-height:1.4}
+.it-hcard .mini{display:inline-block;margin-top:10px;padding:7px 14px;border-radius:16px;background:var(--it-blue);color:#fff;font-size:13.5px;font-weight:600}
+.it-hcard.pro b{color:var(--it-blue-ink)}
+.it-note{display:flex;align-items:center;gap:12px}
+.it-note .ic{width:38px;height:38px;border-radius:50%;background:#E3ECFB;display:grid;place-items:center;flex:none}
+.it-note .ic i{width:13px;height:16px;border-radius:2px;background:var(--it-blue);display:block}
+.it-note small{display:block;font-size:11.5px;color:#999}
+
+/* dark mode — an approximation: no dark frames were supplied */
+.phone-in.dark{--it-bg:#0F1621;--it-bg2:#111A26;--it-blob:#1B2D4D;--it-card:#1A2433;--it-card-dim:rgba(30,42,60,.72);--it-sel:#1D3560;--it-seg:#2C3E5C;
+  --it-ink:#EEF2F7;--it-txt:#C9D1DB;--it-sub:#9AA6B4;--it-muted:#77838F;--it-line:#33435A;--it-blue-ink:#7EA9FF;background:var(--it-bg)}
+.phone-in.dark .screenwrap{background:var(--it-bg)}
+.phone-in.dark .scr{background:radial-gradient(70% 34% at 50% 44%,var(--it-blob),transparent 75%),linear-gradient(180deg,#121C2B 0%,var(--it-bg) 45%,var(--it-bg2) 100%)}
+.phone-in.dark .it-back{color:#EEF2F7}
+.phone-in.dark .it-opt.on,.phone-in.dark .it-mcard,.phone-in.dark .it-rev,.phone-in.dark .it-setup,.phone-in.dark .it-rate,.phone-in.dark .it-cmp,
+.phone-in.dark .it-hcard,.phone-in.dark .it-hsheet,.phone-in.dark .scr--offer .it-x{background:var(--it-card)}
+.phone-in.dark .it-title,.phone-in.dark .it-ft,.phone-in.dark .it-revh,.phone-in.dark .it-load-h,.phone-in.dark .it-rev .by,.phone-in.dark .it-rev .qm,
+.phone-in.dark .it-payh,.phone-in.dark .it-bul div,.phone-in.dark .it-plan .t,.phone-in.dark .it-plan .s,.phone-in.dark .it-plan .r b,.phone-in.dark .it-plan .r span,
+.phone-in.dark .it-oh,.phone-in.dark .it-d2,.phone-in.dark .it-hh b{color:var(--it-ink)}
+.phone-in.dark .it-fs,.phone-in.dark .it-rev p,.phone-in.dark .it-sum,.phone-in.dark .it-chat,.phone-in.dark .it-hcard p{color:var(--it-txt)}
+.phone-in.dark .it-plan .r span.save{color:var(--it-blue-ink)}
+.phone-in.dark .it-chat .q{background:#22385E}
+.phone-in.dark .it-srow,.phone-in.dark .it-cmp td{border-color:#26344A}
+.phone-in.dark .it-plan{background:rgba(255,255,255,.04)}
+.phone-in.dark .it-plan.on{background:var(--it-sel)}
+.phone-in.dark .scr--pay{background:var(--it-bg2)}
+.phone-in.dark .it-payphoto{opacity:.82}
+.phone-in.dark .it-x{background:rgba(20,26,36,.6);color:#EEF2F7}
+.phone-in.dark .scr--offer{background:linear-gradient(180deg,#121C2B 0%,var(--it-bg2) 60%)}
+.phone-in.dark .scr--done{background:#0F1621}
+.phone-in.dark .it-tog{background:#2C3644}
+.phone-in.dark .scr--home{background:linear-gradient(180deg,#152238 0%,#0F1621 30%)}
+.phone-in.dark .it-tabs span{background:#232E3E;color:#B9C3CF}
+.phone-in.dark .it-tabs span.on{background:var(--it-blue);color:#fff}
+.phone-in.dark .it-hcard.tr{background:linear-gradient(120deg,#1C2C47,#1A2433 60%,#183235)}
+.phone-in.dark .it-hh span i,.phone-in.dark .it-note .ic{background:#232E3E}
+.phone-in.dark .it-btn[disabled]{background:#2E3A4A;color:#7F8B99}
+
+/* prototype toolbar, walkthrough, QR */
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:520px}
+.seg{display:inline-flex;align-items:center;background:#fff;border:1px solid #DCE5EE;border-radius:20px;padding:3px;gap:2px}
+.seg button{padding:6px 11px;border-radius:16px;font:600 12px/1 'Inter',sans-serif;color:var(--ink2);transition:.14s}
+.seg button.on{background:var(--ink);color:#fff}
+.demo-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:20px;background:var(--accent);color:#fff;
+  font:700 12px/1 'Inter',sans-serif}
+.demo-cap{width:390px;max-width:calc(100vw - 24px);background:#fff;border:1px solid var(--hair);border-radius:16px;padding:14px 14px 12px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(34,34,37,.07)}
+.demo-cap .bar{position:absolute;left:0;top:0;right:0;height:3px;background:#EDF1F5}
+.demo-cap .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.demo-cap p{flex:1;font-size:13.5px;line-height:1.45;color:var(--ink);margin:0;font-weight:500}
+.demo-cap button{font:700 12px/1 'Inter',sans-serif;color:var(--ink2);padding:7px 10px;border-radius:12px;border:1px solid #DCE5EE;flex:none}
+.finger{position:absolute;z-index:90;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(34,34,37,.26);
+  border:2px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;opacity:0;left:50%;top:60%;
+  transition:left .32s cubic-bezier(.4,0,.2,1),top .32s cubic-bezier(.4,0,.2,1),opacity .2s,transform .15s}
+.finger.show{opacity:1}
+.finger.press{transform:scale(.78);background:rgba(34,34,37,.4)}
+.qr{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hair);border-radius:16px;padding:10px 16px 10px 10px;text-align:left}
+.qr img{width:135px;height:135px;display:block;image-rendering:pixelated;border-radius:6px}
+.qr span{font-size:12.5px;line-height:1.45;color:var(--ink2)}
+.qr b{display:block;color:var(--ink);font-size:13.5px}
+@media(max-width:1080px){.qr{display:none}}
+
+#view-proto .tools{order:0} #view-proto .demo-cap{order:1} #view-proto .phone{order:2} #view-proto .chips{order:3}
+#view-proto .chiphint{order:4} #view-proto .qr{order:5}
+.cta-row .qr{order:2}
+/* on a phone: the prototype is the screen */
+@media(max-width:500px){
+  #view-proto .phonecol{padding:0 0 28px;gap:14px}
+  #view-proto .phone{width:100vw;height:calc(100svh - 58px);min-height:640px;border:0;border-radius:0;box-shadow:none;order:1}
+  #view-proto .phone-in{border-radius:0}
+  #view-proto .island,#view-proto .sbar,#view-proto .homebar{display:none}
+  #view-proto .scr-top{padding-top:16px}
+  #view-proto .scr-foot{padding-bottom:18px}
+  #view-proto .scr--pay .scr-top{padding-top:290px}
+  #view-proto .it-payphoto{height:410px}
+  #view-proto .it-x{top:14px}
+  #view-proto .scr--pay .scr-foot{padding-bottom:16px}
+  #view-proto .tools{order:3;padding:0 12px}
+  #view-proto .demo-cap{position:fixed;left:12px;right:12px;bottom:12px;width:auto;max-width:none;z-index:95}
+  #view-proto .chips{order:4;padding:0 12px}
+  #view-proto .chiphint{order:5}
+}
+
+/* overview: walkthrough button */
+.herobtns{display:flex;justify-content:center;margin-top:30px}
+.ghostbtn{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--hair2);color:var(--ink);font-size:14px;
+  font-weight:700;padding:9px 20px 9px 9px;border-radius:30px;box-shadow:0 2px 12px rgba(34,34,37,.06);transition:.16s}
+.ghostbtn:hover{box-shadow:0 4px 18px rgba(34,34,37,.1)}
+.ghostbtn .pl{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.ghostbtn .pl svg{width:12px;height:12px;fill:#fff;margin-left:2px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:470px;margin:0 auto}
+.chip{padding:7px 13px;border-radius:20px;border:1px solid #DCE5EE;background:#fff;
+  font:600 12px/1 'Inter',sans-serif;color:var(--ink2);transition:.14s}
+.chip:hover{color:var(--ink);border-color:#C3D0DD}
+.chip.offer{border-style:dashed;border-color:var(--accent);color:var(--accent-lift)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;border-style:solid}
+.chiphint{text-align:center;font-size:11px;color:var(--ink3);margin:0;max-width:430px}
+
+/* ============ the short panel ============ */
+.pn{padding:30px 30px 60px}
+.pn-n{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.pn-n.ctx{color:var(--panel-muted)}
+.pn-t{font-size:23px;line-height:1.18;font-weight:700;letter-spacing:-.028em;margin:8px 0 0;color:var(--panel-ink)}
+.pn-hyp{font-size:15px;line-height:1.62;color:#2E353B;margin:16px 0 0}
+.pn-hyp b{font-weight:700;color:var(--panel-ink)}
+.pn-out{margin-top:22px;border-top:1px solid var(--panel-line);padding-top:18px}
+.pn-out .lab{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-muted)}
+.pn-out .v{font-size:31px;font-weight:700;letter-spacing:-.035em;color:var(--accent-ink);margin-top:7px;line-height:1}
+.pn-kept{margin-top:22px;font-size:12.5px;line-height:1.55;color:var(--panel-muted)}
+.pn-kept b{color:#2E353B;font-weight:700}
+.pn-foot{font-size:11.5px;line-height:1.55;color:var(--panel-muted);border-top:1px solid var(--panel-line);
+  padding-top:14px;margin-top:26px}
+.pn-sep{height:1px;background:var(--panel-line);margin:26px 0}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-in">
+    <div class="nav-brand">
+      <span class="mk"><img src="img/icon.jpg" alt="iTranscribe"></span>
+      <b>Growth Audit</b><span>· iTranscribe</span>
+    </div>
+    <div class="nav-links">
+      <button class="on" data-view="over">Overview</button>
+      <button data-view="proto">Prototype</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= OVERVIEW ======================= -->
+<div class="view on" id="view-over">
+
+<div class="hero">
+  <div class="wrap">
+    <!-- month + year = the day you build, not this file --><div class="eyebrow">Growth Audit · November 2026</div>
+    <h1>iTranscribe</h1>
+    <p class="lede">Five ideas to unlock more revenue from the traffic you already have.</p>
+    <div class="meta">Prepared by <b>Adapty</b> · based on your live iOS flow and your App Store listing</div>
+    <div class="herobtns"><button class="ghostbtn" data-demo><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg></span>Watch the 30-second walkthrough</button></div>
+    <div class="stats">
+      <div class="stat"><b>30,000+</b><span>apps run subscriptions<br>on Adapty</span></div>
+      <div class="stat"><b>5</b><span>ideas, each rebuilt<br>as a working screen</span></div>
+      <div class="stat"><b>0</b><span>design changes<br>to your art direction</span></div>
+    </div>
+
+    <div class="fb">
+      <div class="fb-k">Built in Adapty Flow Builder</div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Millions of dollars</b> in subscription revenue pass through Flow Builder every month.</p>
+      </div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Nearly 500 apps</b> actively build their paywalls and onboarding in it — plenty of them past $100K MRR.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">What this is</div>
+    <h2>We opened iTranscribe the way a new user does, then rebuilt the parts we think are leaving money on the table.</h2>
+    <p class="body">Adapty powers subscriptions for <b>30,000+ apps</b>, so we get to see what actually moves conversion and ARPU across the market rather than inside one app. We pointed that at iTranscribe: installed it, went through the first screens up to the paywall, read your App Store listing and your in-app purchase list, and looked for gaps between what you already have and what you currently show people.</p>
+    <p class="body">What follows is five ideas — not fifteen. Each one is a hypothesis you can A/B test, and each one is built into a clickable prototype so you can see it rather than imagine it. <b>The prototype uses your design, not ours.</b></p>
+
+    <div class="notes">
+      <div class="note">
+        <h4>We did not redesign your app</h4>
+        <p>Every screen in the prototype is yours — your blue pill buttons, your option cards, the face tiles and gradient orb, the photo paywall with its yellow Most popular badge. Only the order changed, plus a few things you already own but do not show at the right moment. This is not a design pitch.</p>
+      </div>
+      <div class="note">
+        <h4>You may have tested some of this</h4>
+        <p>We are working from the outside, so we cannot see your experiment history. If one of these is something you have already run, tell us — we will go deeper on the rest rather than repeat it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">The five ideas</div>
+    <h2>Ranked by what we would test first.</h2>
+    <p class="body">Each one links straight to the screen in the prototype.</p>
+
+    <div class="ideas">
+      <button class="idea" data-jump="offer">
+        <span class="no">01</span>
+        <span>
+          <h3>Give people who close the paywall one more option</h3>
+          <p>Today there is no second chance. In our run, the step after the paywall is your home screen with its own “Start Free Trial” card. One screen in between can offer your 1 Year at $49.99 with a free-vs-Pro table — no trial, no timer.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>ARPU +10–15%</b><span>second chance</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">02</span>
+        <span>
+          <h3>Name their use in the paywall headline</h3>
+          <p>Three screens ask how people record, what field they work in and what they want summaries for. Then the paywall says “6000 Minutes Monthly · Choose Your Plan” to everyone. Someone who picked business meetings should read “for your business meetings”.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +15–20%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="payoff">
+        <span class="no">03</span>
+        <span>
+          <h3>Read their answers back before the price</h3>
+          <p>Each question promises to “optimize” something — audio capture, accuracy, AI summaries. The next screen, “Enjoy iTranscribe Pro”, is the same for everyone. A short set-up step that names their three answers keeps that promise.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–15%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="payoff">
+        <span class="no">04</span>
+        <span>
+          <h3>Put your 4.6 and the press quotes next to the decision</h3>
+          <p>Your 4.6 from 6.9K App Store ratings appears nowhere in the flow. The TechCrunch and The Verge quotes sit on the fourth intro slide, six screens before the price.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–15%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">05</span>
+        <span>
+          <h3>Lead with the year, and say “Activated” after the purchase</h3>
+          <p>The $7.99-a-week trial is pre-selected, and a “3 days free trial Activated!” screen appears before anyone has started one. In productivity apps, people who buy straight away are usually worth more than trial users. Pre-select the year — already $0.96 a week on your card — and show “Activated” once it is true.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>ARPU +10–15%</b><span>annual mix</span></span>
+      </button>
+    </div>
+
+    <div class="band">
+      <div class="txt">
+        <div class="lab">Potential outcome</div>
+        <p>Run together, these five move the same funnel at three points — what people hear back after the questions, what the paywall says, and what happens when someone says no.</p>
+      </div>
+      <div class="nums">
+        <div><b>+25%</b><span>CR to purchase</span></div>
+        <div><b>+25%</b><span>ARPU</span></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <div class="qr"><img src="img/qr.svg?v=1" alt="QR code for the prototype"><span><b>Or open it on your phone</b>Scan to try the flow in your hand.</span></div>
+      <button class="bigbtn" data-view="proto">Open the prototype
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="wrap">
+    Impact ranges are Adapty's expected effect from teardowns and A/B tests across subscription apps — not measured lift for iTranscribe. Every price, rating, quote and feature line here and in the prototype comes from iTranscribe's own App Store listing and in-app screens.
+  </div>
+</div>
+</div><!-- /view-over -->
+
+<!-- ======================= PROTOTYPE ======================= -->
+<div class="view" id="view-proto">
+<div class="stage">
+  <div class="phonecol">
+    <div class="tools" id="tools">
+      <div class="seg" id="segLang"><button data-lang="en" class="on">EN</button><button data-lang="zh">繁中</button><button data-lang="de">DE</button></div>
+      <div class="seg" id="segTheme"><button data-theme="light" class="on">Light</button><button data-theme="dark">Dark</button></div>
+      <button class="demo-btn" id="demoBtn"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>30-sec walkthrough</button>
+    </div>
+    <div class="phone">
+      <div class="phone-in" id="phoneIn">
+        <div class="island"></div>
+        <div class="sbar" id="sbar">
+          <span>9:41</span>
+          <span class="glyphs">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7.5" width="3" height="3.5" rx="1"/><rect x="4.5" y="5.5" width="3" height="5.5" rx="1"/><rect x="9" y="3" width="3" height="8" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 10.5 5.6 7.9a3.4 3.4 0 0 1 4.8 0L8 10.5Zm0-5.6a6.4 6.4 0 0 0-4.5 1.9L1.7 4.9a9 9 0 0 1 12.6 0l-1.8 1.9A6.4 6.4 0 0 0 8 4.9Z"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".6" y=".6" width="20" height="10.8" rx="3" stroke="currentColor" stroke-opacity=".5"/><rect x="2.2" y="2.2" width="16.5" height="7.6" rx="1.8" fill="currentColor"/><path d="M22.3 4.1v3.8a2 2 0 0 0 0-3.8Z" fill="currentColor" fill-opacity=".5"/></svg>
+          </span>
+        </div>
+        <div class="homebar" id="homebar"></div>
+        <div class="finger" id="finger"></div>
+        <div class="screenwrap">
+
+<!-- PRIVACY -->
+<section class="scr scr--pay" data-id="privacy" data-light="1">
+  <div class="it-payphoto" style="height:560px"><img src="img/photo.jpg" alt=""></div>
+  <div class="scr-top" style="padding-top:372px"></div>
+  <div class="scr-body">
+    <h2 class="it-payh" style="font-size:28px" data-t="pv.h"></h2>
+    <p style="font-size:13.6px;line-height:1.38;text-align:center;color:#1E2326;margin:12px 6px 0" id="pvBody"></p>
+  </div>
+  <div class="scr-foot"><button class="it-btn" data-go="feat" data-t="cont"></button></div>
+</section>
+
+<!-- INTRO SLIDES (four, as in the app) -->
+<section class="scr" data-id="feat">
+  <div class="scr-top"><h2 class="it-title" id="fTitle"></h2></div>
+  <div class="scr-body">
+    <div id="fSlides">
+      <div data-sl="0">
+        <div class="it-mcard"><div class="it-tiles">
+          <img src="img/tile-1.jpg" alt=""><img src="img/tile-2.jpg" alt="">
+          <span class="it-orb">iTranscribe</span><img src="img/tile-3.jpg" alt="">
+        </div></div>
+      </div>
+      <div data-sl="1">
+        <div class="it-mcard"><div class="it-sum">
+          <h5 data-t="f2.ov"></h5><p data-t="f2.txt"></p>
+          <h5 data-t="f2.ai"></h5><ul><li data-t="f2.a1"></li><li data-t="f2.a2"></li><li data-t="f2.a3"></li></ul>
+        </div></div>
+      </div>
+      <div data-sl="2">
+        <div class="it-mcard"><div class="it-chat">
+          <img class="av" src="img/amanda.jpg" alt="">
+          <div class="q" id="chatQ"></div>
+          <img class="bot" src="img/bot.png" alt="">
+          <p data-t="f3.ans"></p>
+        </div></div>
+      </div>
+      <div data-sl="3">
+        <h3 class="it-revh" data-t="rv.soc"></h3>
+        <div class="it-rev"><div class="it-stars"></div><div class="qm">“</div><p>iTranscribe's AI Summary is so practical! An hour-long meeting recording, and I get the key points in 5 minutes!😄</p><div class="by"><i style="background:#000">𝕏</i>@TechLove</div></div>
+        <div class="it-rev"><div class="it-stars"></div><div class="qm">“</div><p>Using AI Chat to ask about details of transcribed content is 10 times more efficient than flipping through my own notes!💗</p><div class="by"><i style="background:#1877F2">f</i>@Sarah</div></div>
+        <h3 class="it-revh" data-t="rv.med"></h3>
+        <div class="it-rev"><div class="it-stars"></div><div class="qm">“</div><p>iTranscribe redefines speech transcription tools with its powerful AI Summary and Chat functions</p><div class="by">—— TechCrunch</div></div>
+        <div class="it-rev"><div class="it-stars"></div><div class="qm">“</div><p>An APP that can 'understand' speech – iTranscribe's AI functions make information processing easier</p><div class="by">—— The Verge</div></div>
+      </div>
+    </div>
+    <div id="fCaps"><p class="it-ft" id="fT"></p><p class="it-fs" id="fS"></p></div>
+  </div>
+  <div class="scr-foot"><button class="it-btn" id="featBtn" data-t="cont"></button></div>
+</section>
+
+<!-- Q1 RECORDING SCENARIOS -->
+<section class="scr" data-id="scen">
+  <div class="scr-top">
+    <div class="it-nav"><button class="it-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="it-prog"><i class="on"></i><i></i><i></i><i></i></div>
+    <h2 class="it-q" data-t="q1.h"></h2>
+  </div>
+  <div class="scr-body"><div class="it-opts" id="scenList"></div></div>
+  <div class="scr-foot"><button class="it-btn" id="scenBtn" data-go="ind" data-t="cont"></button></div>
+</section>
+
+<!-- Q2 INDUSTRY -->
+<section class="scr" data-id="ind">
+  <div class="scr-top">
+    <div class="it-nav"><button class="it-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="it-prog"><i></i><i class="on"></i><i></i><i></i></div>
+    <h2 class="it-q" data-t="q2.h"></h2>
+  </div>
+  <div class="scr-body"><div class="it-opts" id="indList"></div></div>
+  <div class="scr-foot"><button class="it-btn" id="indBtn" data-go="sum" data-t="cont"></button></div>
+</section>
+
+<!-- Q3 SUMMARY SCENARIOS -->
+<section class="scr" data-id="sum">
+  <div class="scr-top">
+    <div class="it-nav"><button class="it-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="it-prog"><i></i><i></i><i class="on"></i><i></i></div>
+    <h2 class="it-q" data-t="q3.h"></h2>
+  </div>
+  <div class="scr-body"><div class="it-opts" id="sumList"></div><div style="height:8px"></div></div>
+  <div class="scr-foot"><button class="it-btn" id="sumBtn" data-go="loader" data-t="cont"></button></div>
+</section>
+
+<!-- LOADER -->
+<section class="scr scr--load" data-id="loader">
+  <div class="scr-top"></div>
+  <div class="scr-body">
+    <div class="it-loadwrap">
+      <div class="it-bigorb">iTranscribe</div>
+      <h2 class="it-load-h" data-t="ld.h"></h2>
+      <div class="it-lsteps" id="loadSteps">
+        <div class="it-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+        <div class="it-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+        <div class="it-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+      </div>
+      <div class="it-lq"><div class="it-rev" id="lq"><div class="it-stars"></div><div class="qm">“</div><p id="qText">—</p><div class="by" id="qWho">—</div></div></div>
+      <div class="it-qd" id="qDots"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="scr-foot"></div>
+</section>
+
+<!-- PAYOFF: Enjoy iTranscribe Pro, now filled with their answers -->
+<section class="scr" data-id="payoff">
+  <div class="scr-top">
+    <div class="it-nav"><button class="it-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="it-prog"><i></i><i></i><i></i><i class="on"></i></div>
+    <h2 class="it-proh" data-t="po.h"></h2>
+    <p class="it-pros" data-t="po.s"></p>
+  </div>
+  <div class="scr-body">
+    <div class="it-setup">
+      <div class="it-srow"><span class="it-pill">📝 <span data-t="po.rec"></span></span><div><b id="poRec"></b><span data-t="po.recS"></span></div></div>
+      <div class="it-srow"><span class="it-pill">🌟 <span data-t="po.org"></span></span><div><b id="poOrg"></b><span data-t="po.orgS"></span></div></div>
+      <div class="it-srow"><span class="it-pill">⚡ <span data-t="po.use"></span></span><div><b id="poUse"></b><span data-t="po.useS"></span></div></div>
+    </div>
+    <div class="it-rate">
+      <div class="big">4.6</div>
+      <div><div class="it-stars"></div><div class="meta"><b data-t="po.rt"></b><span data-t="po.rs"></span></div></div>
+    </div>
+    <div class="it-press">
+      <div class="it-rev"><div class="it-stars"></div><p>iTranscribe redefines speech transcription tools with its powerful AI Summary and Chat functions</p><div class="by">— TechCrunch</div></div>
+      <div class="it-rev"><div class="it-stars"></div><p>An APP that can 'understand' speech – iTranscribe's AI functions make information processing easier</p><div class="by">— The Verge</div></div>
+    </div>
+    <div style="height:10px"></div>
+  </div>
+  <div class="scr-foot"><button class="it-btn" data-go="paywall" data-t="cont"></button></div>
+</section>
+
+<!-- PAYWALL -->
+<section class="scr scr--pay" data-id="paywall" data-light="1">
+  <div class="it-payphoto"><img src="img/photo.jpg" alt=""></div>
+  <button class="it-x" id="payClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="scr-top">
+    <h2 class="it-payh"><span data-t="pw.l1"></span><span id="payL2"></span></h2>
+  </div>
+  <div class="scr-body">
+    <div class="it-bul">
+      <div><i>🗣️</i>| <span data-t="pw.b1"></span></div>
+      <div><i>🌍</i>| <span data-t="pw.b2"></span></div>
+      <div><i>⏱️</i>| <span data-t="pw.b3"></span></div>
+    </div>
+    <div class="it-plans" id="planList">
+      <button class="it-plan" data-v="year">
+        <span class="it-badge" data-t="pw.badge"></span>
+        <span><span class="t" data-t="pw.year"></span><span class="s" data-t="pw.yearS"></span></span>
+        <span class="r"><b>$49.99</b><span class="save" data-t="pw.yearR"></span></span>
+      </button>
+      <button class="it-plan" data-v="trial">
+        <span><span class="t" data-t="pw.trial"></span><span class="s" data-t="pw.trialS"></span></span>
+        <span class="r"><b>$0</b><span data-t="pw.trialR"></span></span>
+      </button>
+    </div>
+  </div>
+  <div class="scr-foot">
+    <button class="it-btn arrow" id="payCta"></button>
+    <p class="it-trust" id="payTrust"></p>
+    <div class="it-legal"><a data-t="lg.terms"></a><a data-t="lg.priv"></a><a data-t="lg.rest"></a></div>
+  </div>
+</section>
+
+<!-- OFFER ON CLOSE: comparison-led, direct purchase on their own annual SKU -->
+<section class="scr scr--offer sheet" data-id="offer">
+  <button class="it-x" id="offClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="scr-top">
+    <p class="it-ok" data-t="of.k"></p>
+    <h2 class="it-oh" data-t="of.h"></h2>
+  </div>
+  <div class="scr-body">
+    <div class="it-cmp"><table id="cmp"></table></div>
+    <div class="it-plans">
+      <div class="it-plan on">
+        <span class="it-badge" data-t="pw.badge"></span>
+        <span><span class="t" data-t="pw.year"></span><span class="s" data-t="pw.yearS"></span></span>
+        <span class="r"><b>$49.99</b><span class="save" data-t="pw.yearR"></span></span>
+      </div>
+    </div>
+  </div>
+  <div class="scr-foot">
+    <button class="it-btn arrow" id="offerCta" data-t="of.cta"></button>
+    <p class="it-trust" data-t="pw.trY"></p>
+  </div>
+</section>
+
+<!-- ACTIVATED: their toggle screen, moved to after the purchase -->
+<section class="scr scr--done" data-id="done">
+  <div class="scr-top"></div>
+  <div class="scr-body"><div class="it-donewrap">
+    <div class="it-tog" id="tog"><i></i></div>
+    <div class="it-d1" id="doneL1"></div>
+    <div class="it-d2" data-t="dn.act"></div>
+  </div></div>
+  <div class="scr-foot"></div>
+</section>
+
+<!-- HOME: where the flow hands over -->
+<section class="scr scr--home" data-id="home">
+  <div class="scr-top"><div class="it-hh"><b>iTranscribe</b><span><i></i><i></i><i></i></span></div></div>
+  <div class="scr-body">
+    <div class="it-hsheet">
+      <div class="it-tabs"><span class="on" data-t="hm.all"></span><span data-t="hm.imp"></span></div>
+      <div class="it-hcard tr" id="hmTrial"><b data-t="hm.trT"></b><p data-t="hm.trS"></p><span class="mini" data-t="hm.trB"></span></div>
+      <div class="it-hcard tr pro hidden" id="hmPro"><b>iTranscribe Pro</b><p id="hmProS"></p></div>
+      <div class="it-hcard"><div class="it-note"><span class="ic"><i></i></span><div><small id="hmDate"></small><b data-t="hm.n1"></b></div></div></div>
+    </div>
+  </div>
+  <div class="scr-foot"><button class="it-btn plain" data-t="hm.cta"></button></div>
+</section>
+
+        </div>
+      </div>
+    </div>
+    <div class="demo-cap hidden" id="demoCap"><div class="bar"><i id="demoProg"></i></div><p id="demoTxt"></p><button id="demoStop">Stop</button></div>
+    <div class="chips" id="chips"></div>
+    <p class="chiphint">Jump to any screen — answers already filled in.</p>
+    <div class="qr"><img src="img/qr.svg?v=1" alt="QR code for this prototype"><span><b>Open it on your phone</b>Scan to try the flow in your hand.</span></div>
+  </div>
+  <div class="panelcol"><div class="pn" id="panel"></div></div>
+</div>
+</div><!-- /view-proto -->
+
+<script>
+/* ================= copy, per language (phone screens only) ================= */
+var LANGS = ['en','zh','de'];
+var T = {
+ 'cont':  ['Continue','繼續','Weiter'],
+ 'pv.h':  ['Privacy Notice','隱私權聲明','Datenschutzhinweis'],
+ 'pv.b':  ['Your privacy is our concern. We intend to provide transparency and ensure user privacy. Please learn more about how we process the data that can be obtained about you and your device. By continuing you confirm that you acknowledge and accept our <u>Privacy Policy</u>.',
+           '我們重視你的隱私，致力於保持透明並保障用戶隱私。請進一步了解我們如何處理可能取得的你與你裝置的資料。繼續即表示你已知悉並同意我們的<u>隱私權政策</u>。',
+           'Deine Privatsphäre ist uns wichtig. Wir wollen transparent sein und deine Daten schützen. Erfahre mehr darüber, wie wir Daten zu dir und deinem Gerät verarbeiten. Mit „Weiter“ bestätigst du, dass du unsere <u>Datenschutzerklärung</u> zur Kenntnis nimmst und akzeptierst.'],
+ 'f0.h':  ['iTranscribe','iTranscribe','iTranscribe'],
+ 'f0.t':  ['Smarter Speech Transcription','更聰明的語音轉寫','Smartere Sprach-Transkription'],
+ 'f0.s':  ['Unlocks valuable information from audio/videos for you','為你從音訊／影片中挖出有價值的資訊','Holt die wichtigen Infos aus Audio und Video'],
+ 'f1.h':  ['AI Summary','AI 摘要','KI-Zusammenfassung'],
+ 'f1.t':  ['Condense Long Content with One Click','一鍵濃縮長篇內容','Lange Inhalte mit einem Klick verdichten'],
+ 'f1.s':  ['Instantly transformed into well-organized core points','立即整理成清晰的重點','Sofort in klare Kernpunkte verwandelt'],
+ 'f2.h':  ['AI Real-Time Chat','AI 即時對話','KI-Echtzeit-Chat'],
+ 'f2.t':  ['Deeply Explore Content Value','深入挖掘內容價值','Inhalte tiefer erkunden'],
+ 'f2.s':  ['Ask questions about transcribed content anytime','隨時就轉寫內容提問','Stelle jederzeit Fragen zu deinen Transkripten'],
+ 'f2.ov': ['Overview','概要','Überblick'],
+ 'f2.ai': ['Action items','待辦事項','Aufgaben'],
+ 'f2.txt':["John and Leo's department has initiated a new collaboration, and both parties have reached an agreement on objectives, expected data, and workflows. John believes that communication and documenting the progress of meetings are essential for cross-departmental collaboration on the project, while Leo is responsible for the technical aspects and division of labor within the project.",
+           'John 與 Leo 的部門啟動了新的合作，雙方已就目標、預期數據與工作流程達成共識。John 認為溝通與記錄會議進度是跨部門合作的關鍵，Leo 則負責專案的技術部分與分工。',
+           'Die Abteilung von John und Leo hat eine neue Zusammenarbeit gestartet; beide Seiten haben sich auf Ziele, erwartete Daten und Abläufe geeinigt. John hält Kommunikation und das Dokumentieren des Meeting-Fortschritts für entscheidend, Leo verantwortet die Technik und die Aufgabenverteilung.'],
+ 'f2.a1': ["Understand the overall project's expectations and how to allocate task requirements.",'了解專案整體預期，以及如何分配任務需求。','Die Erwartungen an das Projekt verstehen und Aufgaben verteilen.'],
+ 'f2.a2': ['The technical team led by Leo is responsible for the core model of the project.','由 Leo 帶領的技術團隊負責專案的核心模型。','Das Technik-Team unter Leo verantwortet das Kernmodell des Projekts.'],
+ 'f2.a3': ['Amanda is responsible for the acceptance of the mid-term results and setting the next goals.','Amanda 負責驗收中期成果並設定下一步目標。','Amanda nimmt die Zwischenergebnisse ab und setzt die nächsten Ziele.'],
+ 'f3.q':  ['Hey <em>@iTranscribe</em>\nCan you summarize what we discussed last time?','嗨 <em>@iTranscribe</em>\n可以幫我總結上次討論的內容嗎？','Hey <em>@iTranscribe</em>\nKannst du zusammenfassen, was wir letztes Mal besprochen haben?'],
+ 'f3.ans':["Sure thing Amanda.\nJohn and Leo's department has initiated a new collaboration, and both parties have reached an agreement on objectives, expected data, and workflows. John believes that communication and documenting the progress of meetings are essential for cross-departmental collaboration on the project, while Leo is responsible for the technical aspects and division of labor within the project.",
+           '沒問題，Amanda。\nJohn 與 Leo 的部門啟動了新的合作，雙方已就目標、預期數據與工作流程達成共識。John 認為溝通與記錄會議進度是跨部門合作的關鍵，Leo 則負責專案的技術部分與分工。',
+           'Klar, Amanda.\nDie Abteilung von John und Leo hat eine neue Zusammenarbeit gestartet; beide Seiten haben sich auf Ziele, erwartete Daten und Abläufe geeinigt. John hält Kommunikation und das Dokumentieren des Meeting-Fortschritts für entscheidend, Leo verantwortet die Technik und die Aufgabenverteilung.'],
+ 'rv.soc':['Social Media User Reviews:','社群媒體用戶評價：','Bewertungen in sozialen Medien:'],
+ 'rv.med':['Media Reviews:','媒體評價：','Pressestimmen:'],
+ 'q1.h':  ['Please select your typical recording scenarios to optimize audio capture and noise reduction: (Select all that apply)','請選擇你常見的錄音場景，以優化收音與降噪：（可多選）','Wähle deine typischen Aufnahmesituationen, damit wir Aufnahme und Rauschunterdrückung optimieren: (Mehrfachauswahl)'],
+ 'q2.h':  ['Please choose your industry to improve transcription accuracy:','請選擇你的行業，以提升轉寫準確度：','Wähle deine Branche, um die Transkription genauer zu machen:'],
+ 'q3.h':  ['Please choose your common scenarios to optimize AI summaries:','請選擇你常用的場景，以優化 AI 摘要：','Wähle deine häufigsten Situationen, um KI-Zusammenfassungen zu optimieren:'],
+ 'ld.h':  ['Setting up iTranscribe for you…','正在為你設定 iTranscribe…','iTranscribe wird für dich eingerichtet…'],
+ 'ld.1':  ['Optimizing audio capture for {x}','正在為{x}優化收音','Aufnahme wird für {x} optimiert'],
+ 'ld.2':  ['Improving transcription accuracy for {x}','正在提升{x}的轉寫準確度','Transkription wird für {x} genauer'],
+ 'ld.3':  ['Optimizing AI summaries for {x}','正在為{x}優化 AI 摘要','KI-Zusammenfassungen für {x} werden optimiert'],
+ 'and':   [' and ','與',' und '],
+ 'more':  [' +{n} more','（另 {n} 項）',' +{n} weitere'],
+ 'po.h':  ['Enjoy iTranscribe Pro','盡享 iTranscribe Pro','Genieße iTranscribe Pro'],
+ 'po.s':  ['Set up for how you record','已依你的錄音方式完成設定','Eingerichtet für deine Art aufzunehmen'],
+ 'po.rec':['Record','錄音','Aufnehmen'],
+ 'po.org':['Organize','整理','Ordnen'],
+ 'po.use':['Use','使用','Nutzen'],
+ 'po.recS':['Audio capture and noise reduction','收音與降噪','Aufnahme und Rauschunterdrückung'],
+ 'po.orgS':['AI summary template','AI 摘要範本','Vorlage für KI-Zusammenfassungen'],
+ 'po.useS':['Transcription accuracy','轉寫準確度','Genauigkeit der Transkription'],
+ 'po.rt': ['6.9K ratings','6.9K 則評分','6.9K Bewertungen'],
+ 'po.rs': ['on the App Store','App Store 評分','im App Store'],
+ 'pw.l1': ['6000 Minutes Monthly','每月 6000 分鐘','6000 Minuten pro Monat'],
+ 'pw.b1': ['Live transcription for meetings.','會議即時轉寫。','Live-Transkription für Meetings.'],
+ 'pw.b2': ['Translate transcripts in real-time.','即時翻譯轉寫內容。','Transkripte in Echtzeit übersetzen.'],
+ 'pw.b3': ['Convert 60 mins to text in minutes.','60 分鐘音訊，幾分鐘轉成文字。','60 Min. in wenigen Minuten zu Text.'],
+ 'pw.badge':['Most popular','最受歡迎','Am beliebtesten'],
+ 'pw.year':['1 Year','1 年','1 Jahr'],
+ 'pw.yearS':['$0.96 / week','$0.96 / 週','$0.96 / Woche'],
+ 'pw.yearR':['88% less than weekly','比週付省 88%','88 % günstiger als wöchentl.'],
+ 'pw.trial':['3-day free trial','3 天免費試用','3 Tage gratis testen'],
+ 'pw.trialS':['then $7.99/week','之後 $7.99/週','danach $7.99/Woche'],
+ 'pw.trialR':['No payment now','現在無需付款','Jetzt keine Zahlung'],
+ 'pw.ctaT':['Start Free Trial','開始免費試用','Gratis testen'],
+ 'pw.trT':['No commitment. Cancel anytime.','無需承諾，隨時取消。','Keine Bindung. Jederzeit kündbar.'],
+ 'pw.trY':['Billed $49.99 a year. Cancel anytime.','每年收費 $49.99，隨時取消。','$49.99 pro Jahr. Jederzeit kündbar.'],
+ 'lg.terms':['Terms','條款','AGB'], 'lg.priv':['Privacy','隱私權','Datenschutz'], 'lg.rest':['Restore','恢復購買','Wiederherstellen'],
+ 'of.k':  ['Before you go','離開之前','Bevor du gehst'],
+ 'of.h':  ['What Pro adds','Pro 多了什麼','Das bringt Pro'],
+ 'of.free':['Free','免費','Gratis'],
+ 'of.cta':['Get 1 Year','取得 1 年方案','1 Jahr holen'],
+ 'dn.trial':['3 days free trial','3 天免費試用','3 Tage gratis testen'],
+ 'dn.act':['Activated!','已啟用！','Aktiviert!'],
+ 'hm.all':['All','全部','Alle'], 'hm.imp':['Imported','已匯入','Importiert'],
+ 'hm.trT':['Start Free Trial','開始免費試用','Gratis testen'],
+ 'hm.trS':['You have 3 days to test iTranscribe PRO for free.','你有 3 天可免費試用 iTranscribe PRO。','Du kannst iTranscribe PRO 3 Tage gratis testen.'],
+ 'hm.trB':['Activate Trial >','啟用試用 >','Test starten >'],
+ 'hm.pro':['Active · set up for {x}','已啟用 · 針對{x}設定','Aktiv · eingerichtet für {x}'],
+ 'hm.n1': ['AI meeting note taker','AI 會議記錄','KI-Meetingnotizen'],
+ 'hm.cta':['Transcribe More','轉寫更多','Mehr transkribieren']
+};
+/* option lists — their wording, their order */
+var SCEN = [
+  {k:'conf', h:['Conference room:','會議室：','Konferenzraum:'], s:['group discussions; project meetings','小組討論；專案會議','Gruppendiskussionen; Projektmeetings'], x:['conference rooms','會議室','Konferenzräume']},
+  {k:'solo', h:['Indoors, solo:','室內，獨自：','Drinnen, allein:'], s:['personal reviews; idea capture','個人回顧；靈感記錄','persönliche Reviews; Ideen festhalten'], x:['solo recording','獨自錄音','Einzelaufnahmen']},
+  {k:'out',  h:['Outdoors/noisy environments:','戶外／嘈雜環境：','Draußen/laute Umgebung:'], s:['on-site interviews; outdoor recording','現場採訪；戶外錄音','Interviews vor Ort; Außenaufnahmen'], x:['noisy places','嘈雜環境','laute Umgebungen']},
+  {k:'cls',  h:['Classrooms/lectures:','教室／講座：','Hörsaal/Vorlesung:'], s:['large-class teaching; public talks','大班授課；公開演講','Unterricht in großen Gruppen; Vorträge'], x:['lectures','講座','Vorlesungen']}
+];
+var IND = [
+  {k:'biz',  h:['Business/Finance:','商業／金融：','Business/Finanzen:'], s:['client meetings; financial analysis','客戶會議；財務分析','Kundentermine; Finanzanalyse'], x:['Business/Finance','商業／金融','Business/Finanzen']},
+  {k:'tech', h:['Internet/Tech:','網路／科技：','Internet/Tech:'], s:['technical discussions; product communications','技術討論；產品溝通','technische Diskussionen; Produktkommunikation'], x:['Internet/Tech','網路／科技','Internet/Tech']},
+  {k:'edu',  h:['Education/Academia:','教育／學術：','Bildung/Wissenschaft:'], s:['classroom teaching; academic discussions','課堂教學；學術討論','Unterricht; wissenschaftliche Diskussionen'], x:['Education/Academia','教育／學術','Bildung/Wissenschaft']},
+  {k:'oth',  h:['Other fields:','其他領域：','Andere Bereiche:'], s:['general-use, adaptive to varied scenarios','通用，適應各種場景','allgemein, für viele Situationen'], x:['general use','通用場景','allgemeine Nutzung']}
+];
+var SUM = [
+  {k:'biz',  h:['Business meetings:','商務會議：','Business-Meetings:'], s:['auto-generated summaries focused on decisions and task assignment','自動生成摘要，聚焦決策與任務分配','automatische Zusammenfassungen mit Fokus auf Entscheidungen und Aufgaben'],
+   x:['business meetings','商務會議','Business-Meetings'], pw:['for your business meetings','為你的商務會議','für deine Business-Meetings'], o:['Business meeting summaries','商務會議摘要','Meeting-Zusammenfassungen']},
+  {k:'lec',  h:['Classrooms/Lectures:','課堂／講座：','Unterricht/Vorlesungen:'], s:['note templates that capture knowledge points and key takeaways','筆記範本，記下知識點與重點','Notizvorlagen für Wissenspunkte und Kernaussagen'],
+   x:['lectures','課堂講座','Vorlesungen'], pw:['for your lectures','為你的課堂講座','für deine Vorlesungen'], o:['Lecture notes','講座筆記','Vorlesungsnotizen']},
+  {k:'ins',  h:['Personal inspiration recording:','個人靈感記錄：','Persönliche Ideen:'], s:['concise templates for ideas and keywords','簡潔範本，記下想法與關鍵字','kompakte Vorlagen für Ideen und Stichworte'],
+   x:['your ideas','靈感記錄','deine Ideen'], pw:['for your ideas','為你的靈感','für deine Ideen'], o:['Idea notes','靈感筆記','Ideennotizen']},
+  {k:'int',  h:['Professional interviews:','專業訪談：','Professionelle Interviews:'], s:['structured templates for viewpoints and Q&A','結構化範本，整理觀點與問答','strukturierte Vorlagen für Standpunkte und Q&A'],
+   x:['interviews','專業訪談','Interviews'], pw:['for your interviews','為你的專業訪談','für deine Interviews'], o:['Interview notes','訪談筆記','Interviewnotizen']},
+  {k:'gen',  h:['Multi-scenario general use:','多場景通用：','Allgemein, viele Situationen:'], s:['adaptive generation of comprehensive yet concise summaries','自適應生成全面又精簡的摘要','anpassbare, umfassende und doch knappe Zusammenfassungen'],
+   x:['every recording','各種錄音','jede Aufnahme'], pw:['for every recording','為你的每段錄音','für jede Aufnahme'], o:['Concise summaries','精簡摘要','Kompakte Zusammenfassungen']}
+];
+/* free vs premium — the two lists in their App Store description */
+var CMP = [
+  [['Record in one tap','一鍵錄音','Aufnehmen mit einem Tipp'],1],
+  [['Playback & speed control','播放與變速','Wiedergabe & Tempo'],1],
+  [['Live transcription over 10 min','超過 10 分鐘的即時轉寫','Live-Transkription über 10 Min.'],0],
+  [['Transcribe audio files','轉寫音訊檔','Audiodateien transkribieren'],0],
+  [['Translate transcripts','翻譯轉寫內容','Transkripte übersetzen'],0],
+  [['60 min of audio in under 5 min','60 分鐘音訊 5 分鐘內轉完','60 Min. Audio in unter 5 Min.'],0],
+  [['Export TXT, SRT and more','匯出 TXT、SRT 等格式','Export als TXT, SRT u. a.'],0]
+];
+/* their four reviews, verbatim, in the language they were written in */
+var QUOTES = [
+  ["iTranscribe's AI Summary is so practical! An hour-long meeting recording, and I get the key points in 5 minutes!😄",'@TechLove'],
+  ['Using AI Chat to ask about details of transcribed content is 10 times more efficient than flipping through my own notes!💗','@Sarah'],
+  ['iTranscribe redefines speech transcription tools with its powerful AI Summary and Chat functions','— TechCrunch'],
+  ["An APP that can 'understand' speech – iTranscribe's AI functions make information processing easier",'— The Verge']
+];
+var LOCALE = {en:'en-US', zh:'zh-TW', de:'de-DE'};
+
+/* ================= state ================= */
+function defaults(){ return { lang:S0.lang, theme:S0.theme, slide:0, scen:['conf'], ind:['tech'], sum:['biz'], plan:'year', bought:'' }; }
+var S0 = {lang:'en', theme:'light'};
+var S = defaults();
+function L(){ return LANGS.indexOf(S.lang); }
+function t(k,v){ var s=(T[k]||[k])[L()]; if(v) Object.keys(v).forEach(function(x){ s=s.split('{'+x+'}').join(v[x]); }); return s; }
+function pick(list,keys){ return list.filter(function(o){ return keys.indexOf(o.k)>-1; }); }
+function echo(list,keys,f){ var p=pick(list,keys); if(!p.length) return ''; var s=p[0][f][L()]; return p.length>1 ? s+t('more',{n:p.length-1}) : s; }
+function firstSum(){ return pick(SUM,S.sum)[0] || SUM[4]; }
+
+/* ================= builders (re-run on language change) ================= */
+var STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+document.querySelectorAll('.it-stars').forEach(function(s){ s.innerHTML=STAR+STAR+STAR+STAR+STAR; });
+function buildOpts(id,list,key){ var g=document.getElementById(id); g.innerHTML='';
+  list.forEach(function(o){ var b=document.createElement('button'); b.className='it-opt'; b.dataset.v=o.k;
+    b.innerHTML='<b>'+o.h[L()]+'</b><span>'+o.s[L()]+'</span>';
+    b.addEventListener('click',function(){ var a=S[key], i=a.indexOf(o.k); if(i>-1) a.splice(i,1); else a.push(o.k); syncScreen(); });
+    g.appendChild(b); }); }
+function buildCmp(){ var h='<tr><th></th><th>'+t('of.free')+'</th><th class="pro">Pro</th></tr>';
+  CMP.forEach(function(r){ h+='<tr><td>'+r[0][L()]+'</td><td class="'+(r[1]?'y':'n')+'">'+(r[1]?'✓':'—')+'</td><td class="y">✓</td></tr>'; });
+  document.getElementById('cmp').innerHTML=h; }
+function applyStatic(){
+  document.documentElement.lang=S.lang==='zh'?'zh-Hant':S.lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent=t(el.dataset.t); });
+  document.getElementById('pvBody').innerHTML=t('pv.b');
+  document.getElementById('chatQ').innerHTML=t('f3.q');
+  buildOpts('scenList',SCEN,'scen'); buildOpts('indList',IND,'ind'); buildOpts('sumList',SUM,'sum'); buildCmp();
+}
+
+/* ================= everything downstream reads S ================= */
+function syncScreen(){
+  var li=L();
+  /* intro slides */
+  document.querySelectorAll('#fSlides [data-sl]').forEach(function(d){ d.classList.toggle('hidden', +d.dataset.sl!==S.slide); });
+  var rv=S.slide===3;
+  document.getElementById('fTitle').classList.toggle('hidden',rv); document.getElementById('fCaps').classList.toggle('hidden',rv);
+  if(!rv){ document.getElementById('fTitle').textContent=t('f'+S.slide+'.h');
+    document.getElementById('fT').textContent=t('f'+S.slide+'.t'); document.getElementById('fS').textContent=t('f'+S.slide+'.s'); }
+  /* questions */
+  [['scenList','scen','scenBtn'],['indList','ind','indBtn'],['sumList','sum','sumBtn']].forEach(function(q){
+    document.querySelectorAll('#'+q[0]+' .it-opt').forEach(function(b){ b.classList.toggle('on', S[q[1]].indexOf(b.dataset.v)>-1); });
+    document.getElementById(q[2]).disabled=!S[q[1]].length; });
+  /* loader reads every answer back */
+  var st=document.querySelectorAll('#loadSteps .it-ls .t');
+  st[0].textContent=t('ld.1',{x:echo(SCEN,S.scen,'x')||'—'});
+  st[1].textContent=t('ld.2',{x:echo(IND,S.ind,'x')||'—'});
+  st[2].textContent=t('ld.3',{x:echo(SUM,S.sum,'x')||'—'});
+  /* payoff: Record / Organize / Use, filled with their answers */
+  document.getElementById('poRec').textContent=echo(SCEN,S.scen,'h').replace(/[:：]/,'').replace(/[:：]/,'') || '—';
+  document.getElementById('poOrg').textContent=echo(SUM,S.sum,'o') || '—';
+  document.getElementById('poUse').textContent=echo(IND,S.ind,'x') || '—';
+  /* paywall headline names the summary scenario */
+  document.getElementById('payL2').textContent=firstSum().pw[li];
+  document.querySelectorAll('#planList .it-plan').forEach(function(b){ b.classList.toggle('on', b.dataset.v===S.plan); });
+  var yr=S.plan==='year';
+  document.getElementById('payCta').textContent = yr ? t('cont') : t('pw.ctaT');
+  document.getElementById('payTrust').textContent = yr ? t('pw.trY') : t('pw.trT');
+  /* activated, after the purchase */
+  document.getElementById('doneL1').textContent = S.bought==='trial' ? t('dn.trial') : 'iTranscribe Pro';
+  /* home */
+  document.getElementById('hmTrial').classList.toggle('hidden',!!S.bought);
+  document.getElementById('hmPro').classList.toggle('hidden',!S.bought);
+  document.getElementById('hmProS').textContent=t('hm.pro',{x:firstSum().x[li]});
+  document.getElementById('hmDate').textContent=new Intl.DateTimeFormat(LOCALE[S.lang],{weekday:'short',month:'2-digit',day:'2-digit'}).format(new Date())+' · 06:56';
+}
+
+/* ================= router ================= */
+var ORDER=['privacy','feat','scen','ind','sum','loader','payoff','paywall','offer','done','home'];
+var LABEL={privacy:'Privacy',feat:'Intro slides',scen:'Recording',ind:'Industry',sum:'Summaries',loader:'Set-up',payoff:'Payoff',paywall:'Paywall',offer:'Offer on close',done:'Activated',home:'Home'};
+var scr={}, hist=[], cur='privacy', loadTimers=[], doneTimer=null;
+document.querySelectorAll('.scr').forEach(function(s){ scr[s.dataset.id]=s; });
+
+function chrome(){ var dark=S.theme==='dark', l=dark || !!scr[cur].dataset.light;
+  document.getElementById('sbar').classList.toggle('light',l); document.getElementById('homebar').classList.toggle('light',dark); }
+function enter(id){ chrome(); paintChips(); paintPanel(); clearLoad();
+  if(id==='loader') runLoader(); if(id==='done') runDone(); }
+function go(id,opts){
+  opts=opts||{}; if(id===cur) return;
+  var from=scr[cur], to=scr[id];
+  if(!opts.back) hist.push(cur);
+  if(from){ from.classList.remove('is-active');
+    if(!to.classList.contains('sheet') && !from.classList.contains('sheet')) from.classList.add('is-past'); }
+  Object.keys(scr).forEach(function(k){ if(k!==id&&k!==cur) scr[k].classList.remove('is-active'); });
+  to.classList.remove('is-past'); to.classList.add('is-active');
+  cur=id; enter(id);
+}
+function back(){
+  if(!hist.length) return;
+  var prev=hist.pop();
+  scr[cur].classList.remove('is-active');
+  scr[prev].classList.remove('is-past'); scr[prev].classList.add('is-active');
+  cur=prev; enter(prev);
+}
+function jump(id){
+  var i=ORDER.indexOf(id);
+  Object.keys(scr).forEach(function(k){ scr[k].classList.add('nofx'); scr[k].classList.remove('is-active','is-past'); });
+  hist=ORDER.slice(0,i<0?0:i);
+  if(id==='feat') S.slide=0;
+  if(id==='offer') scr.paywall.classList.add('is-active');
+  if(id==='done'||id==='home') S.bought=S.bought||'year';
+  scr[id].classList.add('is-active'); cur=id;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    Object.keys(scr).forEach(function(k){ scr[k].classList.remove('nofx'); }); }); });
+  syncScreen(); enter(id);
+}
+function paintChips(){
+  var c=document.getElementById('chips');
+  if(!c.children.length){
+    ORDER.forEach(function(id){
+      var b=document.createElement('button'); b.className='chip'+(id==='offer'?' offer':''); b.textContent=LABEL[id];
+      b.dataset.id=id; b.onclick=function(){ stopDemo(); jump(id); }; c.appendChild(b);
+    });
+  }
+  c.querySelectorAll('.chip').forEach(function(b){ b.classList.toggle('on', b.dataset.id===cur); });
+}
+
+function clearLoad(){ loadTimers.forEach(clearTimeout); loadTimers=[]; if(doneTimer){ clearTimeout(doneTimer); doneTimer=null; } }
+function showQuote(i){
+  document.getElementById('qText').textContent=QUOTES[i][0];
+  document.getElementById('qWho').textContent=QUOTES[i][1];
+  document.querySelectorAll('#qDots i').forEach(function(d,n){ d.classList.toggle('on',n===i); });
+}
+function runLoader(){
+  var k=demo.on?0.48:1;
+  var steps=document.querySelectorAll('#loadSteps .it-ls');
+  steps.forEach(function(s){ s.classList.remove('on'); });
+  showQuote(0);
+  steps.forEach(function(s,i){ loadTimers.push(setTimeout(function(){ s.classList.add('on'); },(700+i*1000)*k)); });
+  [1,2,3].forEach(function(i){ loadTimers.push(setTimeout(function(){ showQuote(i); },(1300+(i-1)*1300)*k)); });
+  loadTimers.push(setTimeout(function(){ if(cur==='loader') go('payoff'); },5200*k));
+}
+function runDone(){ var tg=document.getElementById('tog'); tg.classList.remove('on');
+  loadTimers.push(setTimeout(function(){ tg.classList.add('on'); },350));
+  loadTimers.push(setTimeout(function(){ if(cur==='done') go('home'); },2600)); }
+
+/* ================= wiring ================= */
+document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ if(!b.disabled) go(b.dataset.go); }); });
+document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click',back); });
+document.getElementById('featBtn').addEventListener('click',function(){ if(S.slide<3){ S.slide++; syncScreen(); scr.feat.querySelector('.scr-body').scrollTop=0; paintPanel(); } else go('scen'); });
+document.querySelectorAll('#planList .it-plan').forEach(function(b){ b.addEventListener('click',function(){ S.plan=b.dataset.v; syncScreen(); }); });
+document.getElementById('payClose').addEventListener('click',function(){ go('offer'); });
+document.getElementById('payCta').addEventListener('click',function(){ S.bought=S.plan; syncScreen(); go('done'); });
+document.getElementById('offerCta').addEventListener('click',function(){ S.bought='year'; syncScreen(); go('done'); });
+document.getElementById('offClose').addEventListener('click',function(){ S.bought=''; syncScreen(); go('home'); });
+
+function setSeg(id,attr,val){ document.querySelectorAll('#'+id+' button').forEach(function(b){ b.classList.toggle('on', b.dataset[attr]===val); }); }
+function setLang(l){ S.lang=l; S0.lang=l; setSeg('segLang','lang',l); applyStatic(); syncScreen(); paintPanel(); }
+function setTheme(th){ S.theme=th; S0.theme=th; document.getElementById('phoneIn').classList.toggle('dark',th==='dark'); setSeg('segTheme','theme',th); chrome(); }
+document.querySelectorAll('#segLang button').forEach(function(b){ b.addEventListener('click',function(){ stopDemo(); setLang(b.dataset.lang); }); });
+document.querySelectorAll('#segTheme button').forEach(function(b){ b.addEventListener('click',function(){ setTheme(b.dataset.theme); }); });
+
+/* ================= the 30-second walkthrough ================= */
+var demo={tok:0,on:false,t0:0,iv:null}, finger=document.getElementById('finger'), phoneIn=document.getElementById('phoneIn');
+function W(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function cap(txt){ document.getElementById('demoTxt').textContent=txt; }
+async function tap(sel,tok){
+  if(demo.tok!==tok) throw 0;
+  var el=document.querySelector(sel); if(!el) return;
+  var r=el.getBoundingClientRect(), p=phoneIn.getBoundingClientRect(), z=p.width/phoneIn.offsetWidth||1;
+  finger.style.left=((r.left-p.left+r.width/2)/z)+'px'; finger.style.top=((r.top-p.top+r.height/2)/z)+'px';
+  finger.classList.add('show'); await W(380); if(demo.tok!==tok) throw 0;
+  finger.classList.add('press'); await W(120); finger.classList.remove('press'); el.click(); await W(160);
+  if(demo.tok!==tok) throw 0;
+}
+async function pause(ms,tok){ await W(ms); if(demo.tok!==tok) throw 0; }
+function startDemo(){
+  stopDemo(); var tok=++demo.tok; demo.on=true; demo.t0=Date.now();
+  var keep={lang:S.lang,theme:S.theme}; S=defaults(); S.lang=keep.lang; S.theme=keep.theme;
+  applyStatic(); jump('privacy');
+  document.getElementById('demoCap').classList.remove('hidden');
+  demo.iv=setInterval(function(){ document.getElementById('demoProg').style.width=Math.min(100,(Date.now()-demo.t0)/290)+'%'; },200);
+  (async function(){
+    try{
+      cap('Your first screens stay as they are: the privacy notice, then your four intro slides.'); await pause(1300,tok);
+      await tap('[data-id=privacy] .it-btn',tok); await pause(500,tok);
+      await tap('#featBtn',tok); await pause(300,tok); await tap('#featBtn',tok); await pause(300,tok); await tap('#featBtn',tok); await pause(500,tok);
+      await tap('#featBtn',tok);
+      cap('Your three questions, unchanged. How they record…'); await pause(500,tok);
+      await tap('#scenList [data-v=cls]',tok); await pause(300,tok); await tap('#scenBtn',tok);
+      cap('…what field they work in…'); await pause(400,tok);
+      await tap('#indList [data-v=tech]',tok); await pause(250,tok); await tap('#indList [data-v=edu]',tok); await pause(300,tok); await tap('#indBtn',tok);
+      cap('…and what they want summaries for. Say, lectures.'); await pause(400,tok);
+      await tap('#sumList [data-v=biz]',tok); await pause(250,tok); await tap('#sumList [data-v=lec]',tok); await pause(300,tok); await tap('#sumBtn',tok);
+      cap('Their three answers, read back while it sets up.'); await pause(2700,tok);
+      cap('“Enjoy iTranscribe Pro”, now filled with their answers — and your 4.6 and press quotes.'); await pause(2300,tok);
+      await tap('[data-id=payoff] .it-btn',tok);
+      cap('The paywall names their use: “for your lectures”. The year is pre-selected.'); await pause(1800,tok);
+      await tap('#planList [data-v=trial]',tok); await pause(700,tok); await tap('#planList [data-v=year]',tok); await pause(500,tok);
+      cap('They close it. One offer: your own 1 Year, with a free-vs-Pro table. No trial, no timer.'); await tap('#payClose',tok); await pause(2400,tok);
+      cap('That is the flow. Use the chips under the phone to jump to any screen.');
+      finger.classList.remove('show'); await pause(1300,tok); stopDemo();
+    }catch(e){}
+  })();
+}
+function stopDemo(){ if(!demo.on) return; demo.tok++; demo.on=false; clearInterval(demo.iv); finger.classList.remove('show','press');
+  document.getElementById('demoCap').classList.add('hidden'); }
+document.getElementById('demoBtn').addEventListener('click',startDemo);
+document.getElementById('demoStop').addEventListener('click',stopDemo);
+phoneIn.addEventListener('pointerdown',function(e){ if(e.isTrusted && demo.on) stopDemo(); });
+</script>
+<script>
+/* ---- the short panel: hypothesis + potential outcome, nothing else ---- */
+var PANEL = {
+privacy:{ctx:true,t:'Privacy Notice',
+ kept:'Untouched — your photo, the centred title, the policy text and link, the blue Continue pill with its chevron. We only fixed two typos in the policy line.'},
+feat:{ctx:true,t:'Your four intro slides',
+ kept:'Untouched and in your order — Smarter Speech Transcription with the face tiles and gradient orb, AI Summary, AI Real-Time Chat and the reviews slide. Tap Continue to step through them. The reviews stay here; idea 04 repeats them next to the price.'},
+scen:{n:3,t:'Read their answers back before the price',
+ hyp:'Try keeping this question exactly as it is, <b>because it promises to “optimize audio capture and noise reduction”, and the set-up step two screens on is where that promise gets paid</b>. Change the answer and the set-up step changes with it.',
+ kept:'Your question copy, all four options with their sub-lines, the white selected card with its blue outline and your four-part progress bar.',
+ out:'CR +10–15%'},
+ind:{n:3,t:'Read their answers back before the price',
+ hyp:'Try carrying the field they pick into the set-up step, <b>because “to improve transcription accuracy” is a promise, and today nothing after this screen mentions it again</b>.',
+ kept:'Your four fields and their sub-lines, in your order.',
+ out:'CR +10–15%'},
+sum:{n:3,t:'Read their answers back before the price',
+ hyp:'Try letting this answer name the paywall, <b>because it is the closest thing in the flow to what they want iTranscribe for</b>. Pick Classrooms/Lectures and the paywall reads “for your lectures”.',
+ kept:'Your five scenarios and their descriptions, in your order.',
+ out:'CR +10–15%'},
+loader:{n:3,t:'Read their answers back before the price',
+ hyp:'Try a short set-up step that names their three answers, <b>because each question promised to optimize something and this is where they see it happen</b>. The quotes are the four reviews from your own intro slide, word for word.',
+ kept:'Your gradient orb, your blue and your review cards with their stars.',
+ out:'CR +10–15%'},
+payoff:{n:3,t:'Read their answers back before the price',
+ hyp:'Try turning “Enjoy iTranscribe Pro” into a set-up summary, <b>because today it reads the same for everyone, right after three personal questions</b>. Record, Organize and Use are your own three labels, now filled with their answers.',
+ n2:4, hyp2:'Try putting your 4.6 from 6.9K App Store ratings and the TechCrunch and The Verge quotes here, <b>because today they sit on an intro slide, six screens before the price, and the rating appears nowhere</b>.',
+ out2:'CR +10–15%',
+ kept:'Your title in blue, your Record / Organize / Use pills, the progress bar on its last step, and the review cards and stars from your reviews slide.',
+ out:'CR +10–15%'},
+paywall:{n:2,t:'Name their use in the paywall headline',
+ hyp:'Try naming their summary scenario under “6000 Minutes Monthly”, <b>because three screens of answers end on a headline written for nobody in particular</b>. Go back to the summaries question and pick something else — the headline follows.',
+ n2:5, hyp2:'Try pre-selecting the year and showing it as 88% less than weekly, <b>because today the $7.99-a-week trial is pre-selected, and in productivity apps people who buy straight away are usually worth more than trial users</b>. $0.96 a week is already on your card.',
+ out2:'ARPU +10–15%',
+ kept:'Your photo, the two-line headline, the emoji bullet lines, both plan cards with the yellow Most popular badge, the blue CTA with its arrow and the footer links. The close button is ours: we could not see one in the recording.',
+ out:'CR +15–20%'},
+offer:{n:1,t:'Give people who close the paywall one more option',
+ hyp:'Try one offer when someone closes the paywall, <b>because in our run the next screen is your home page, with no second chance in between</b>. It sells your own 1 Year at $49.99. No trial, no timer, no invented discount.',
+ kept:'Your background, your plan card with the Most popular badge and your blue CTA. The table rows are the free and premium lists from your App Store description.',
+ out:'ARPU +10–15%'},
+done:{n:5,t:'Lead with the year, and say “Activated” after the purchase',
+ hyp:'Try showing this screen after they start the trial or buy, <b>because today “3 days free trial Activated!” appears before the paywall, when nothing has been activated yet</b>. One of your App Store reviews describes exactly that confusion.',
+ kept:'Your toggle animation and your type, word for word. Only its position moved. Buy the year instead and it reads “iTranscribe Pro · Activated!”.',
+ out:'ARPU +10–15%'},
+home:{ctx:true,t:'Home',
+ kept:'Where the flow hands over to your app. Anyone who closed both screens lands here with your own Start Free Trial card, as today.'}
+};
+
+function outBlock(lab,val){
+  return '<div class="pn-out"><div class="lab">'+lab+'</div><div class="v">'+val+'</div></div>';
+}
+function paintPanel(){
+  var d=PANEL[cur]; if(!d) return;
+  var h='';
+  if(d.ctx){
+    h += '<div class="pn-n ctx">Context · no change proposed</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<div class="pn-kept">'+d.kept+'</div>';
+  } else {
+    h += '<div class="pn-n">Idea '+d.n+' of 5</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<p class="pn-hyp">'+d.hyp+'</p>'
+       + outBlock('Potential outcome · based on Adapty data', d.out);
+    if(d.hyp2){
+      h += '<div class="pn-sep"></div>'
+         + '<div class="pn-n">Idea '+d.n2+' of 5</div>'
+         + '<p class="pn-hyp" style="margin-top:12px">'+d.hyp2+'</p>'
+         + outBlock('Potential outcome · based on Adapty data', d.out2);
+    }
+    h += '<div class="pn-kept"><b>Your design, unchanged.</b> '+d.kept+'</div>';
+  }
+  if(S.lang!=='en') h += '<div class="pn-kept"><b>Language.</b> Screens are shown in '+(S.lang==='zh'?'Traditional Chinese':'German')+' to show one flow serving every market — translated by us. Store prices stay as published in US dollars; the reviews stay word for word in English.</div>';
+  h += '<div class="pn-foot">Ranges are Adapty’s expected effect from tests across 30,000+ subscription apps — not measured lift for iTranscribe. '
+     + 'Prices, ratings, quotes and feature lines come from your own published material.</div>';
+  document.getElementById('panel').innerHTML = h;
+}
+
+/* ---- views, jumps from the overview ---- */
+function showView(v){
+  if(v!=='proto') stopDemo();
+  document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('on'); });
+  document.getElementById('view-'+v).classList.add('on');
+  document.querySelectorAll('.nav-links button[data-view]').forEach(function(b){ b.classList.toggle('on', b.dataset.view===v); });
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ showView(b.dataset.view); }); });
+document.querySelectorAll('.idea[data-jump]').forEach(function(b){
+  b.addEventListener('click',function(){ showView('proto'); jump(b.dataset.jump); });
+});
+document.querySelectorAll('[data-demo]').forEach(function(b){ b.addEventListener('click',function(){ showView('proto'); startDemo(); }); });
+
+applyStatic();
+scr.privacy.classList.add('is-active');
+syncScreen(); chrome(); paintChips(); paintPanel();
+if(/[?&]open=proto/.test(location.search)) showView('proto');
+</script>
+</body>
+</html>
